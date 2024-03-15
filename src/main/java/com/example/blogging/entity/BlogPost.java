@@ -18,7 +18,7 @@ public class BlogPost {
     @Column(name = "post_content")
     private String content;
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "author_id")
     User user;
     @OneToMany(mappedBy = "blogPost", cascade = CascadeType.ALL)
     List<Comment> comments;

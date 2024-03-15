@@ -1,8 +1,10 @@
 package com.example.blogging.controllers;
 
 
+import com.example.blogging.dto.BlogPostResponse;
 import com.example.blogging.entity.BlogPost;
 import com.example.blogging.service.BlogPostService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,13 +23,20 @@ public class BlogPostController {
     BlogPostService blogPostService;
 
     @PostMapping("/blog")
-    public BlogPost saveBlog(@RequestBody BlogPost blogPost) {
-        return blogPostService.createBlogPost(blogPost);
+    public BlogPostResponse saveBlog(@RequestBody BlogPost blogPost, HttpServletRequest request) {
+        String username = getUsernameFromHeader(request);
+        return blogPostService.createBlogPost(blogPost, username);
+    }
+
+    public String getUsernameFromHeader(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        String username = blogPostService.extractUsernameFromToken(token);
+        return username;
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<BlogPost>> searchBlogPosts(@RequestParam String keyword) {
-        List<BlogPost> searchResults = blogPostService.searchBlogPosts(keyword);
+    public ResponseEntity<List<BlogPostResponse>> searchBlogPosts(@RequestParam String keyword) {
+        List<BlogPostResponse> searchResults = blogPostService.searchBlogPosts(keyword);
         return ResponseEntity.ok(searchResults);
     }
     @GetMapping("/blog")
@@ -41,19 +50,27 @@ public class BlogPostController {
         Page<BlogPost> blogPostPage = blogPostService.getAllBlogPosts(pageable);
         return ResponseEntity.ok(blogPostPage.getContent());
     }
+
+    @GetMapping("/posts")
+    public ResponseEntity<List<BlogPostResponse>>findallBlogs() {
+        return ResponseEntity.ok(blogPostService.getAllBlogs());
+    }
+
     @GetMapping("/blog/{id}")
-    public Optional<BlogPost> getBlogPost(@PathVariable Long id) {
+    public Optional<BlogPostResponse> getBlogPost(@PathVariable Long id) {
       return blogPostService.getBlogPostById(id);
     }
 
     @PutMapping("/blog/{id}")
-    public BlogPost updateBlogPost(@PathVariable Long id, @RequestBody BlogPost updatedBlogPost) {
-      return  blogPostService.updateBlogPost(updatedBlogPost);
+    public BlogPostResponse updateBlogPost(@PathVariable Long id, @RequestBody BlogPost updatedBlogPost, HttpServletRequest request) {
+        String username = getUsernameFromHeader(request);
+      return  blogPostService.updateBlogPost(updatedBlogPost, username);
     }
 
     @DeleteMapping("/blog/{id}")
-    public ResponseEntity<Void> deleteBlogPost(@PathVariable Long id) {
-        blogPostService.deleteBlogPostById(id);
+    public ResponseEntity<Void> deleteBlogPost(@PathVariable Long id, HttpServletRequest request) {
+        String username = getUsernameFromHeader(request);
+        blogPostService.deleteBlogPostById(id, username);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 //    @GetMapping("/blog")

@@ -5,6 +5,7 @@ import com.example.blogging.dto.SignInRequest;
 import com.example.blogging.dto.SignUpRequest;
 import com.example.blogging.entity.User;
 import com.example.blogging.service.AuthenticationService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

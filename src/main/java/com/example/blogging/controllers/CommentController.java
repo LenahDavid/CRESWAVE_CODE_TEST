@@ -1,7 +1,10 @@
 package com.example.blogging.controllers;
 
+import com.example.blogging.dto.CommentResponse;
 import com.example.blogging.entity.Comment;
+import com.example.blogging.service.BlogPostService;
 import com.example.blogging.service.CommentService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,9 +20,16 @@ public class CommentController {
     @Autowired
     CommentService commentService;
 
-    @PostMapping("/comment")
-    public Comment saveComment(@RequestBody Comment comment) {
-        return commentService.createComment(comment);
+    @Autowired
+    BlogPostService blogPostService;
+
+    @Autowired
+    BlogPostController blogPostController;
+
+    @PostMapping("/comment/{id}")
+    public CommentResponse saveComment(@RequestBody Comment comment, @PathVariable("id") Long id, HttpServletRequest request) {
+        String username = blogPostController.getUsernameFromHeader(request);
+        return commentService.createComment(comment, id, username);
     }
 
     @GetMapping("/comment")
@@ -40,13 +50,15 @@ public class CommentController {
     }
 
     @PutMapping("/comment/{id}")
-    public Comment updateComment(@PathVariable Long id, @RequestBody Comment updatedComment) {
-        return  commentService.updateComment(updatedComment);
+    public Comment updateComment(@PathVariable Long id, @RequestBody Comment updatedComment, HttpServletRequest request) {
+        String username = blogPostController.getUsernameFromHeader(request);
+        return  commentService.updateComment(updatedComment, username);
     }
 
     @DeleteMapping("/comment/{id}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
-        commentService.deleteCommentById(id);
+    public ResponseEntity<Void> deleteComment(@PathVariable Long id, HttpServletRequest request) {
+        String username = blogPostController.getUsernameFromHeader(request);
+        commentService.deleteCommentById(id, username);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

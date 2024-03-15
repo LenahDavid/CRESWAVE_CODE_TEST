@@ -1,6 +1,7 @@
 package com.example.blogging.service;
 
 
+import com.example.blogging.dto.BlogPostResponse;
 import com.example.blogging.entity.BlogPost;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,14 +12,18 @@ import java.util.Optional;
 
 @Service
 public interface BlogPostService {
-    public BlogPost createBlogPost(BlogPost blogPost);
-    public Optional<BlogPost> getBlogPostById(Long id);
+    public BlogPostResponse createBlogPost(BlogPost blogPost, String username);
+    public Optional<BlogPostResponse> getBlogPostById(Long id);
 
-    public void deleteBlogPostById(Long id);
-    public BlogPost updateBlogPost(BlogPost blogPost);
+    public void deleteBlogPostById(Long id, String username);
+    public BlogPostResponse updateBlogPost(BlogPost blogPost, String username);
 
 
     Page<BlogPost> getAllBlogPosts(PageRequest pageable);
 
-    List<BlogPost> searchBlogPosts(String keyword);
+    List<BlogPostResponse> searchBlogPosts(String keyword);
+
+    String extractUsernameFromToken(String token);
+
+    List<BlogPostResponse> getAllBlogs();
 }
