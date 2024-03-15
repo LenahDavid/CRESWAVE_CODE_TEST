@@ -136,6 +136,16 @@ public class BlogPostServiceImpl implements BlogPostService {
     }
 
     @Override
+    public List<BlogPost> searchByTitleOrContent(String keyword) {
+        return null;
+    }
+
+    @Override
+    public List<BlogPost> searchBlogPostsByTitleOrContent(String keyword) {
+        return null;
+    }
+
+    @Override
     public List<BlogPostResponse> searchBlogPosts(String keyword) {
 
         List<BlogPost> blogPosts = blogPostRepository.searchByTitleOrContent(keyword);
@@ -160,6 +170,21 @@ public class BlogPostServiceImpl implements BlogPostService {
         }
         return userEmail;
     }
+    // In BlogPostMapper.java or BlogPostServiceImpl.java
+    public BlogPostResponse mapToResponseDto(BlogPost blogPost) {
+        BlogPostResponse response = new BlogPostResponse();
+        response.setId(blogPost.getId());
+        response.setTitle(blogPost.getTitle());
+        response.setContent(blogPost.getContent());
+
+        // Check if the user is not null before accessing its properties
+        if (blogPost.getUser() != null) {
+            response.setUsername(blogPost.getUser().getUsername());
+        }
+
+        return response;
+    }
+
 }
 
 
