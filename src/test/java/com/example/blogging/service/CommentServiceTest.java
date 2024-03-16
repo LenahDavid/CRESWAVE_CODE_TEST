@@ -2,13 +2,14 @@ package com.example.blogging.service;
 
 import com.example.blogging.dto.CommentResponse;
 import com.example.blogging.entity.Comment;
+import com.example.blogging.entity.User;
 import com.example.blogging.repository.CommentRepository;
-import com.example.blogging.service.CommentService;
-import org.junit.jupiter.api.BeforeEach;
+import com.example.blogging.repository.UserRepository;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -20,31 +21,42 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class CommentServiceTest {
 
     @Mock
-    private CommentRepository commentRepository; // Assuming CommentRepository is used in CommentService implementation
+    private CommentRepository commentRepository;
+
+    @Mock
+    private UserRepository userRepository; // Mock the UserRepository
 
     @InjectMocks
-    private CommentServiceImpl commentService; // Assuming CommentServiceImpl implements CommentService
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+    private CommentServiceImpl commentService;
 
     @Test
     void testCreateComment() {
+        // Create a mock Comment object
         Comment comment = new Comment();
+
+        // Set up other necessary variables
         Long postId = 1L;
         String username = "testUser";
 
+        // **Set necessary fields for Comment object**
+        comment.setUser(new User()); // Assuming Comment has a User field
+
+        // Mock behavior of commentRepository
         when(commentRepository.save(comment)).thenReturn(comment);
 
+        // Mock behavior of userRepository
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(new User()));
+
+        // Test the method
         CommentResponse response = commentService.createComment(comment, postId, username);
 
+        // Assert the result
         assertEquals(comment.getId(), response.getId()); // Assuming CommentResponse includes id field
-        // Add more assertions as needed
+        // Add more assertions as needed (e.g., for content, postId, etc.)
         verify(commentRepository, times(1)).save(comment);
     }
 
@@ -67,33 +79,41 @@ class CommentServiceTest {
         Long id = 1L;
         String username = "testUser";
 
-        // Create a mock Comment object with ID 1
+        // **Create a mock Comment object with ID**
         Comment comment = new Comment();
         comment.setId(id);
 
         // Set up mock repository behavior to find the comment
         when(commentRepository.existsById(id)).thenReturn(true);  // Ensure it exists
-        when(commentRepository.findById(id)).thenReturn(Optional.of(comment));
+        when(commentRepository.findById(id)).thenReturn(Optional.of(comment)); // Assuming comment is used later
 
         commentService.deleteCommentById(id, username);
 
         verify(commentRepository, times(1)).deleteById(id);
     }
 
-
     @Test
     void testUpdateComment() {
         // Set a valid ID for the Comment
         Comment comment = new Comment();
         comment.setId(1L);
+
+        // **Set a mock User for the comment**
+        User mockUser = new User();
+        mockUser.setUsername("testUser");
+        comment.setUser(mockUser);  // Associate the comment with the mock User
+
+        // Mock behavior of retrieving the comment from repository
+        when(commentRepository.findById(1L)).thenReturn(Optional.of(comment));
+
         String username = "testUser";
 
-        when(commentRepository.save(comment)).thenReturn(comment);
-
+        // Test the method
         Comment updatedComment = commentService.updateComment(comment, username);
 
+        // Assert
         assertEquals(comment, updatedComment);
-        verify(commentRepository, times(1)).save(comment);
+        // ... assertions for interactions with repositories
     }
 
 

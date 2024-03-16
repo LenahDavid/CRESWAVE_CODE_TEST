@@ -1,7 +1,9 @@
 package com.example.blogging.service;
 
+import com.example.blogging.entity.BlogPost;
 import com.example.blogging.entity.Role;
 import com.example.blogging.entity.User;
+import com.example.blogging.repository.BlogPostRepository;
 import com.example.blogging.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +23,10 @@ public class UserServiceImplTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private BlogPostRepository blogPostRepository;
+
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -58,13 +64,31 @@ public class UserServiceImplTest {
 
     @Test
     void testDeleteUserById() {
+        // Mock blogPostRepository's existsById method to return true
+        Mockito.when(blogPostRepository.existsById(1L)).thenReturn(true);
+
+        // Ensure userRepository returns true for existsById(1L)
+        Mockito.when(userRepository.existsById(1L)).thenReturn(true);
+
+        // Mock behavior to consistently find the BlogPost by ID
+        BlogPost blogPost = new BlogPost();
+        blogPost.setId(1L);
+        Mockito.when(blogPostRepository.findById(1L)).thenReturn(Optional.of(blogPost));
+
+        // Test the method
         userService.deleteUserById(1L);
 
+        // Verify calls to repositories
         Mockito.verify(userRepository, Mockito.times(1)).deleteById(1L);
+        // Verify interaction with blogPostRepository if applicable
+        Mockito.verify(blogPostRepository, Mockito.times(1)).findById(1L);
     }
+
 
     @Test
     void testUpdateUser() {
+        // Ensure the repository returns a User when findById(1L) is called
+        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
         Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(testUser);
 
         User updatedUser = userService.updateUser(testUser);
@@ -72,6 +96,7 @@ public class UserServiceImplTest {
         Assertions.assertEquals(testUser, updatedUser);
         // Add more assertions as needed to verify other fields
     }
+
 
     @Test
     void testUserDetailsService() {

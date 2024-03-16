@@ -1,4 +1,5 @@
 package com.example.blogging.repository;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -8,6 +9,7 @@ import java.util.List;
 
 import com.example.blogging.entity.BlogPost;
 import com.example.blogging.service.BlogPostService;
+import com.example.blogging.service.BlogPostServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,10 +20,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class BlogPostRepositoryTest {
 
     @Mock
+    private BlogPostService mockBlogPostService;
+    @Mock
     private BlogPostRepository blogPostRepository;
-
     @InjectMocks
-    private BlogPostService blogPostService; // Assuming you have a service to use the repository
+    private BlogPostServiceImpl blogPostServiceImpl;
 
     @Test
     public void testSearchByTitleOrContent() {
@@ -38,10 +41,10 @@ public class BlogPostRepositoryTest {
         blogPost2.setContent("Unit testing is important.");
 
         List<BlogPost> mockResult = Arrays.asList(blogPost1, blogPost2);
-        when(blogPostRepository.searchByTitleOrContent(anyString())).thenReturn(mockResult);
+        when(blogPostRepository.searchByTitleOrContent(keyword)).thenReturn(mockResult);
 
-        // Call the service method that uses the repository method
-        List<BlogPost> result = blogPostService.searchBlogPostsByTitleOrContent(keyword);
+        // Call the service method
+        List<BlogPost> result = blogPostServiceImpl.searchBlogPostsByTitleOrContent(keyword);
 
         // Verify the result
         assertThat(result).isNotNull();
@@ -49,4 +52,5 @@ public class BlogPostRepositoryTest {
         assertThat(result.get(0).getTitle()).isEqualTo("Test Blog 1");
         assertThat(result.get(1).getTitle()).isEqualTo("Blog about testing");
     }
+
 }

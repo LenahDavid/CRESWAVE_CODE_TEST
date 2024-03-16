@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 class BlogPostControllerTest {
@@ -66,7 +67,7 @@ class BlogPostControllerTest {
     }
 
     @Test
-    void testGetAllBlogPosts() {
+    public void testGetAllBlogPosts() {
         int page = 0;
         int size = 10;
         String sortBy = "createdAt";
@@ -75,10 +76,14 @@ class BlogPostControllerTest {
         List<BlogPost> expectedBlogPosts = new ArrayList<>();
         PageImpl<BlogPost> pageImpl = new PageImpl<>(expectedBlogPosts);
 
+        // Mock to return a non-null PageImpl with empty list (optional)
         when(blogPostService.getAllBlogPosts(PageRequest.of(page, size))).thenReturn(pageImpl);
 
+        // Adjusting the controller method call
         ResponseEntity<List<BlogPost>> responseEntity = blogPostController.getAllBlogPosts(page, size, sortBy, sortOrder);
 
+        // Verify the behavior and assertions
+        assertNotNull(responseEntity.getBody(), "Response body should not be null"); // Check for null before assertions
         assertEquals(expectedBlogPosts, responseEntity.getBody());
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         verify(blogPostService, times(1)).getAllBlogPosts(PageRequest.of(page, size));

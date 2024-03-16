@@ -91,7 +91,7 @@ class BlogPostServiceTest {
         User user = new User();
         user.setUsername("testUser");
 
-        // Create a mock BlogPost object with ID 1 and associated User
+        // **Create and initialize a BlogPost object**
         BlogPost blogPost = new BlogPost();
         blogPost.setId(1L);
         blogPost.setUser(user);
@@ -100,7 +100,7 @@ class BlogPostServiceTest {
 
         // Mock behavior to consistently find the BlogPost by ID
         when(blogPostRepository.existsById(1L)).thenReturn(true);
-        when(blogPostRepository.findById(1L)).thenReturn(Optional.of(blogPost)); // Find by ID for deletion
+        when(blogPostRepository.findById(1L)).thenReturn(Optional.of(blogPost)); // Now blogPost is initialized
 
         // Test the method
         assertDoesNotThrow(() -> blogPostService.deleteBlogPostById(1L, username));
@@ -108,6 +108,8 @@ class BlogPostServiceTest {
         // Verify deleteById is called with the correct ID
         verify(blogPostRepository).deleteById(1L);
     }
+
+
 
 
 

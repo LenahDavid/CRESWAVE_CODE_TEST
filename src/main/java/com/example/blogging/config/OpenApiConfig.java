@@ -1,19 +1,19 @@
 package com.example.blogging.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
-import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
-import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 
 @OpenAPIDefinition(
         info = @Info(
                 contact = @Contact(
-                name = "Lenah David",
-                email= "lenahdevy@gmail.com"
+                        name = "Lenah David",
+                        email = "lenahdevy@gmail.com"
                 ),
                 description = "OpenApi Documentation",
                 title = "Blogging API"
@@ -29,7 +29,6 @@ import io.swagger.v3.oas.annotations.servers.Server;
                         name = "bearerAuth"
                 )
         }
-
 )
 @SecurityScheme(
         name = "bearerAuth",
