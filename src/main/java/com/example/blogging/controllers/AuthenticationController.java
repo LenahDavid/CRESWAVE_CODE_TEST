@@ -32,6 +32,7 @@ public class AuthenticationController {
             summary = "Signing up of users"
 
     )
+//    signing up a user
     @PostMapping("/api/v1/auth/signup")
     public ResponseEntity<User> signup(@RequestBody SignUpRequest signUpRequest){
         return  ResponseEntity.ok(authenticationService.signup(signUpRequest));
@@ -41,6 +42,7 @@ public class AuthenticationController {
             summary = "Signing in of users"
 
     )
+//    signing in a user
     @PostMapping("/api/v1/auth/signin")
     public ResponseEntity<JWTAuthenticationResponse>  signin(@RequestBody SignInRequest signInRequest){
         return  ResponseEntity.ok(authenticationService.signin(signInRequest));

@@ -8,8 +8,8 @@ import com.example.blogging.service.CommentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -20,13 +20,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.Collections;
-
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = CommentController.class) // Focus on web layer
+@WebMvcTest(controllers = CommentController.class)
 @ExtendWith({MockitoExtension.class, SpringExtension.class})
 public class CommentControllerIntegrationTest {
 
@@ -37,18 +35,14 @@ public class CommentControllerIntegrationTest {
     private CommentService commentService;
 
     @MockBean
-    private BlogPostController blogPostController; // We need to mock BlogPostController
+    private BlogPostController blogPostController;
 
     @Test
     public void testSaveComment() throws Exception {
         Comment comment = new Comment();
-        // Set up your comment object
-
         CommentResponse response = new CommentResponse();
-        // Set up your response object
-
         when(blogPostController.getUsernameFromHeader(any())).thenReturn("username"); // Mock getUsernameFromHeader
-        when(commentService.createComment(any(Comment.class), anyLong(), anyString())).thenReturn(response);
+        when(commentService.createComment(any(Comment.class), any(Long.class), any(String.class))).thenReturn(response);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/comment/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -58,9 +52,6 @@ public class CommentControllerIntegrationTest {
                 .andExpect(jsonPath("$.yourField").value("expectedValue"));
     }
 
-    // Add more test methods for other controller endpoints
-
-    // Utility method to convert object to JSON string
     private static String asJsonString(final Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj);

@@ -1,15 +1,16 @@
 package com.example.blogging.service.integrationtest;
 
+import com.example.blogging.entity.User;
 import com.example.blogging.service.JWTServiceImpl;
-import com.example.blogging.service.JWTService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -23,6 +24,7 @@ public class JWTServiceIntegrationTest {
     @InjectMocks
     private JWTServiceImpl jwtService;
 
+
     @Test
     public void testExtractUserName() {
         String token = "example_token";
@@ -34,11 +36,20 @@ public class JWTServiceIntegrationTest {
 
     @Test
     public void testGenerateToken() {
-        UserDetails userDetails = new User("testuser", "password", null);
+        UserDetails userDetails = org.springframework.security.core.userdetails.User
+                .withUsername("testuser")
+                .password("password")
+                .authorities(Collections.singletonList(() -> "ROLE_USER"))
+                .build();
+
         String expectedToken = "generated_token";
         when(jwtTokenUtil.generateToken(userDetails)).thenReturn(expectedToken);
 
-        assertEquals(expectedToken, jwtService.generateToken(userDetails));
+        String actualToken = jwtService.generateToken(userDetails);
+        System.out.println("Actual token: " + actualToken);
+
+        assertEquals(expectedToken, actualToken);
     }
+
 }
 

@@ -4,6 +4,7 @@ import com.example.blogging.controllers.AuthenticationController;
 import com.example.blogging.controllers.BlogPostController;
 import com.example.blogging.dto.BlogPostResponse;
 import com.example.blogging.entity.BlogPost;
+import com.example.blogging.repository.UserRepository;
 import com.example.blogging.service.BlogPostService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -26,8 +27,8 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = BlogPostController.class) // Focus on web layer
-@ExtendWith({MockitoExtension.class, SpringExtension.class})
+@WebMvcTest(controllers = BlogPostController.class)
+// Remove unnecessary ExtendWith annotation
 public class BlogPostControllerIntegrationTest {
 
     @Autowired
@@ -36,14 +37,13 @@ public class BlogPostControllerIntegrationTest {
     @MockBean
     private BlogPostService blogPostService;
 
+    @MockBean
+    private UserRepository userRepository;
+
     @Test
     public void testSaveBlog() throws Exception {
         BlogPost blogPost = new BlogPost();
-        // Set up your blogPost object
-
         BlogPostResponse response = new BlogPostResponse();
-        // Set up your response object
-
         when(blogPostService.createBlogPost(any(BlogPost.class), anyString())).thenReturn(response);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/blog")
@@ -54,14 +54,19 @@ public class BlogPostControllerIntegrationTest {
                 .andExpect(jsonPath("$.yourField").value("expectedValue"));
     }
 
-    // Add more test methods for other controller endpoints
-
-    // Utility method to convert object to JSON string
     private static String asJsonString(final Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public UserRepository getUserRepository() {
+        return userRepository;
+    }
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 }

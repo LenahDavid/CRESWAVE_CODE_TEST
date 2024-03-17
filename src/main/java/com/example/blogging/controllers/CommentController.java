@@ -40,6 +40,7 @@ public class CommentController {
             summary = "Posting of a comment on a blog post"
 
     )
+//    Posting of comments
     @PostMapping("/comment/{id}")
     public CommentResponse saveComment(@RequestBody Comment comment, @PathVariable("id") Long id, HttpServletRequest request) {
         String username = blogPostController.getUsernameFromHeader(request);
@@ -50,6 +51,7 @@ public class CommentController {
             summary = "Getting of all the comments"
 
     )
+//      Getting of comments
     @GetMapping("/comment")
     public ResponseEntity<List<Comment>> getAllComments(
             @RequestParam(defaultValue = "0") int page,
@@ -66,6 +68,7 @@ public class CommentController {
             summary = "Getting of comments by id"
 
     )
+//    Getting of comment by id
     @GetMapping("/comment/{id}")
     public Optional<Comment> getComment(@PathVariable Long id) {
         return commentService.getCommentById(id);
@@ -75,6 +78,7 @@ public class CommentController {
             summary = "Updating of comments by id"
 
     )
+//    Updating a comment
     @PutMapping("/comment/{id}")
     public Comment updateComment(@PathVariable Long id, @RequestBody Comment updatedComment, HttpServletRequest request) {
         String username = blogPostController.getUsernameFromHeader(request);
@@ -85,6 +89,7 @@ public class CommentController {
             summary = "Deleting of comments by id"
 
     )
+//    Deleting of comments
     @DeleteMapping("/comment/{id}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long id, HttpServletRequest request) {
         String username = blogPostController.getUsernameFromHeader(request);

@@ -27,6 +27,7 @@ public class UserController {
             summary = "Creating of users"
 
     )
+//    Creating of users
     @PostMapping("/api/v1/user")
     public User saveUser(@RequestBody User user) {
         return userService.createUser(user);
@@ -36,6 +37,7 @@ public class UserController {
             summary = "Getting of user  by Id"
 
     )
+//    Getting of user by id
     @GetMapping("/api/v1/user/{id}")
     public Optional<User> getUser(@PathVariable Long id) {
         return userService.getUserById(id);
@@ -45,6 +47,7 @@ public class UserController {
             summary = "Updating of a user by Id"
 
     )
+//    Updating of user by id
     @PutMapping("/api/v1/user/{id}")
     public User updateUser(@PathVariable Long id, @RequestBody User updateUser) {
         return  userService.updateUser(updateUser);
@@ -54,6 +57,7 @@ public class UserController {
             summary = "Deleting of user by Id"
 
     )
+//    Deleting of user by id
     @DeleteMapping("/api/v1/user/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUserById(id);

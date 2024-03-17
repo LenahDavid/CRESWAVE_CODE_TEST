@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,18 +22,21 @@ public class JWTServiceImplIntegrationTest {
 
     @InjectMocks
     private JWTServiceImpl jwtService;
+    JWTServiceImpl jwtTokenUtil;
 
     @Test
     public void testGenerateToken() {
-        // Given
-        UserDetails userDetails = new User("testuser", "password", null);
+        // Create a mock User with a single authority
+        UserDetails userDetails = org.springframework.security.core.userdetails.User
+                .withUsername("testuser")
+                .password("password")
+                .authorities(Collections.singletonList(() -> "ROLE_USER"))
+                .build();
 
-        // When
-        String token = jwtService.generateToken(userDetails);
+        String expectedToken = "generated_token";
+        when(jwtTokenUtil.generateToken(userDetails)).thenReturn(expectedToken);
 
-        // Then
-        assertNotNull(token);
-        assertTrue(token.length() > 0);
+        assertEquals(expectedToken, jwtService.generateToken(userDetails));
     }
 
     @Test

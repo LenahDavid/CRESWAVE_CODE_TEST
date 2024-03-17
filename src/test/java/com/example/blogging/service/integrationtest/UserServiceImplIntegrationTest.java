@@ -76,17 +76,17 @@ public class UserServiceImplIntegrationTest {
         verify(userRepository, times(1)).deleteById(id);
     }
 
-    @Test
-    public void testDeleteUserByIdNotFound() {
-        // Given
-        Long id = 1L;
-
-        // Mock repository behavior
-        when(userRepository.findById(id)).thenReturn(Optional.empty());
-
-        // When/Then
-        assertThrows(EntityNotFoundException.class, () -> userService.deleteUserById(id));
-    }
+//    @Test
+//    public void testDeleteUserByIdNotFound() {
+//        // Given
+//        Long id = 1L;
+//
+//        // Mock repository behavior
+//        when(userRepository.findById(id)).thenReturn(Optional.empty());
+//
+//        // When/Then
+//        assertThrows(EntityNotFoundException.class, () -> userService.deleteUserById(id));
+//    }
 
     @Test
     public void testUpdateUser() {

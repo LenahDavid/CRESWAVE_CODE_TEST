@@ -23,12 +23,17 @@ public class UserRepositoryIntegrationTest {
     @Test
     public void testFindByRole() {
         Role role = Role.USER;
-        userRepository.save(new User());
+        User user = new User();
+        user.setUsername("user1"); // Set the username here
+        user.setRole(role);
+        userRepository.save(user);
 
         User foundUser = userRepository.findByRole(role);
 
         assertEquals("user1", foundUser.getUsername());
     }
+
+
 
     @Test
     public void testFindByUsername() {

@@ -83,11 +83,12 @@ class BlogPostControllerTest {
         ResponseEntity<List<BlogPost>> responseEntity = blogPostController.getAllBlogPosts(page, size, sortBy, sortOrder);
 
         // Verify the behavior and assertions
-        assertNotNull(responseEntity.getBody(), "Response body should not be null"); // Check for null before assertions
+        assertNotNull(responseEntity.getBody(), "Response body should not be null");
         assertEquals(expectedBlogPosts, responseEntity.getBody());
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         verify(blogPostService, times(1)).getAllBlogPosts(PageRequest.of(page, size));
     }
+
 
     @Test
     void testGetBlogPost() {

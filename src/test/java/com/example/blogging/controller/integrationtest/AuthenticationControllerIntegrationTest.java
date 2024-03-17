@@ -5,6 +5,7 @@ import com.example.blogging.dto.JWTAuthenticationResponse;
 import com.example.blogging.dto.SignInRequest;
 import com.example.blogging.dto.SignUpRequest;
 import com.example.blogging.entity.User;
+import com.example.blogging.repository.UserRepository;
 import com.example.blogging.service.AuthenticationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,25 +29,23 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = AuthenticationController.class) // Focus on web layer
-@ExtendWith({MockitoExtension.class, SpringExtension.class}) // Enable extensions
+@WebMvcTest(controllers = AuthenticationController.class)
 public class AuthenticationControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean // Mock the service
+    @MockBean
     private AuthenticationService authenticationService;
+
+    @MockBean
+    private UserRepository userRepository;
 
 
     @Test
     public void testSignup() throws Exception {
         SignUpRequest signUpRequest = new SignUpRequest();
-        // Set up your signUpRequest object
-
         User user = new User();
-        // Set up your User object
-
         when(authenticationService.signup(any(SignUpRequest.class))).thenReturn(user);
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -56,19 +56,20 @@ public class AuthenticationControllerIntegrationTest {
                         .content(requestBody))
                 .andExpect(status().isOk())
                 .andReturn();
-
-        // Add more assertions if needed
     }
 
     @Test
     public void testSignin() throws Exception {
+        // Set up your SignInRequest object with valid credentials
         SignInRequest signInRequest = new SignInRequest();
-        // Set up your signInRequest object
+        signInRequest.setUsername("username"); // Replace with actual username
+        signInRequest.setPassword("password"); // Replace with actual password
 
+        // Set up a mock JWTAuthenticationResponse (optional)
         JWTAuthenticationResponse jwtAuthenticationResponse = new JWTAuthenticationResponse();
-        // Set up your JWTAuthenticationResponse object
+        // You can set specific values in the response if needed for verification
 
-        when(authenticationService.signin(any(SignInRequest.class))).thenReturn(jwtAuthenticationResponse);
+        when(authenticationService.signin(signInRequest)).thenReturn(jwtAuthenticationResponse);
 
         ObjectMapper objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(signInRequest);
@@ -78,6 +79,13 @@ public class AuthenticationControllerIntegrationTest {
                         .content(requestBody))
                 .andExpect(status().isOk())
                 .andReturn();
+    }
 
+    public UserRepository getUserRepository() {
+        return userRepository;
+    }
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 }

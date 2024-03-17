@@ -36,6 +36,7 @@ public class BlogPostController {
             summary = "Posting of blog posts"
 
     )
+//    Posting a blog
     @PostMapping("/blog")
     public BlogPostResponse saveBlog(@RequestBody BlogPost blogPost, HttpServletRequest request) {
         String username = getUsernameFromHeader(request);
@@ -52,6 +53,7 @@ public class BlogPostController {
             summary = "Searching of blog posts by title or content"
 
     )
+//    searching of blog by either content or title
     @GetMapping("/search")
     public ResponseEntity<List<BlogPostResponse>> searchBlogPosts(@RequestParam String keyword) {
         List<BlogPostResponse> searchResults = blogPostService.searchBlogPosts(keyword);
@@ -62,6 +64,7 @@ public class BlogPostController {
             summary = "Getting of all blog posts"
 
     )
+//    Pagination of blogs
     @GetMapping("/blog")
     public ResponseEntity<List<BlogPost>> getAllBlogPosts(
             @RequestParam(defaultValue = "0") int page,
@@ -78,6 +81,7 @@ public class BlogPostController {
             summary = "Getting all blog posts"
 
     )
+//    Getting of all blogs
     @GetMapping("/posts")
     public ResponseEntity<List<BlogPostResponse>> findallBlogs() {
         return ResponseEntity.ok(blogPostService.getAllBlogs());
@@ -87,6 +91,7 @@ public class BlogPostController {
             summary = "Getting single blog post by Id"
 
     )
+//    getting blog by id
     @GetMapping("/blog/{id}")
     public Optional<BlogPostResponse> getBlogPost(@PathVariable Long id) {
         return blogPostService.getBlogPostById(id);
@@ -96,6 +101,7 @@ public class BlogPostController {
             summary = "Updating of blog posts by id"
 
     )
+//    Editing of blog
     @PutMapping("/blog/{id}")
     public BlogPostResponse updateBlogPost(@PathVariable Long id, @RequestBody BlogPost updatedBlogPost, HttpServletRequest request) {
         String username = getUsernameFromHeader(request);
@@ -106,6 +112,7 @@ public class BlogPostController {
             summary = "Deleting of blog posts by id"
 
     )
+//    Deleting of blog
     @DeleteMapping("/blog/{id}")
     public ResponseEntity<Void> deleteBlogPost(@PathVariable Long id, HttpServletRequest request) {
         String username = getUsernameFromHeader(request);
