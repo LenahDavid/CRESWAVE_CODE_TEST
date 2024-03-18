@@ -1,7 +1,5 @@
-
 package com.example.blogging.service;
 
-import com.example.blogging.dto.BlogPostResponse;
 import com.example.blogging.dto.CommentResponse;
 import com.example.blogging.entity.BlogPost;
 import com.example.blogging.entity.Comment;
@@ -10,13 +8,17 @@ import com.example.blogging.entity.User;
 import com.example.blogging.repository.BlogPostRepository;
 import com.example.blogging.repository.CommentRepository;
 import com.example.blogging.repository.UserRepository;
+import com.example.blogging.util.BlogPostMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+
 @Service
 public class CommentServiceImpl implements CommentService {
 
@@ -35,26 +37,22 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentResponse createComment(Comment comment, Long id, String username) {
 
-
-
-        User user = userRepository.findByUsername(username).get();
-        BlogPost post = blogPostRepository.getReferenceById(id);
-        comment.setUser(user);
+        BlogPost post = blogPostRepository.getById(id);
+        comment.setUser(username);
         comment.setBlogPost(post);
         commentRepository.save(comment);
 
         return CommentResponse.builder()
                 .id(comment.getId())
-                .blogTitle(post.getTitle())
                 .content(comment.getContent())
-                .user(comment.getUser().getUsername())
+                .user(username)
                 .build();
 
     }
 
     @Override
-    public Optional<Comment> getCommentById(Long id) {
-        return commentRepository.findById(id);
+    public Optional<CommentResponse> getCommentById(Long id) {
+        return Optional.ofNullable(BlogPostMapper.maptoCommentDto(commentRepository.findById(id).get()));
     }
 
     @Override
@@ -71,7 +69,7 @@ public class CommentServiceImpl implements CommentService {
             commentRepository.deleteById(id);
         } else if (user.getRole().equals(Role.USER)) {
             //check if user is the author of the comment
-            if (!existingComment.getUser().getUsername().equals(username)) {
+            if (!existingComment.getUser().equals(username)) {
                 throw new IllegalArgumentException("You are not authorized to update this comment");
             }
             commentRepository.deleteById(id);
@@ -81,21 +79,31 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment updateComment(Comment updatedComment, String username) {
-        Long id = updatedComment.getId();
+    public CommentResponse updateComment(Long id, Comment updatedComment, String username) {
         Comment existingComment = commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Comment with id " + id + " not found"));
 
         //check if user is the author of the comment
-        if (!existingComment.getUser().getUsername().equals(username)) {
+        if (!existingComment.getUser().equals(username)) {
             throw new IllegalArgumentException("You are not authorized to update this comment");
         }
 
         existingComment.setContent(updatedComment.getContent());
-        return commentRepository.save(existingComment);
+        return BlogPostMapper.maptoCommentDto(commentRepository.save(existingComment));
     }
     @Override
     public Page<Comment> getAllComments(PageRequest pageable) {
         return commentRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<CommentResponse> getComments() {
+        List<Comment> comments = commentRepository.findAll();
+        List<CommentResponse> commentResponses = new ArrayList<>();
+
+        for(Comment comment: comments){
+            commentResponses.add(BlogPostMapper.maptoCommentDto(comment));
+        }
+        return commentResponses;
     }
 }

@@ -82,7 +82,7 @@ class BlogPostServiceImplTest {
         blogPost.setId(1L);
         blogPost.setTitle("Test Title");
         blogPost.setContent("Test Content");
-        blogPost.setUser(user); // Set the user here
+        blogPost.setUser(String.valueOf(user)); // Set the user here
 
         // Mock behavior to return the blog post
         when(blogPostRepository.findById(1L)).thenReturn(Optional.of(blogPost));
@@ -112,7 +112,7 @@ class BlogPostServiceImplTest {
         blogPost.setId(1L);
         blogPost.setTitle("Test Title");
         blogPost.setContent("Test Content");
-        blogPost.setUser(user); // Set the user
+        blogPost.setUser(String.valueOf(user)); // Set the user
 
         // Mock the behavior of repositories
         when(blogPostRepository.findById(1L)).thenReturn(Optional.of(blogPost));
@@ -136,7 +136,7 @@ class BlogPostServiceImplTest {
         blogPost.setId(1L);
         blogPost.setTitle("Test Title");
         blogPost.setContent("Test Content");
-        blogPost.setUser(user); // Set the user
+        blogPost.setUser(String.valueOf(user)); // Set the user
 
         // Mock the behavior of repositories
         when(blogPostRepository.findById(1L)).thenReturn(Optional.of(blogPost));

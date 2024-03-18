@@ -17,9 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -52,7 +50,7 @@ public class CommentServiceIntegrationTest {
         when(commentRepository.findById(1L)).thenReturn(Optional.of(comment));
 
         // Test method
-        Optional<Comment> result = commentService.getCommentById(1L);
+        Optional<CommentResponse> result = commentService.getCommentById(1L);
 
         // Assertions
         assertTrue(result.isPresent());
@@ -66,10 +64,20 @@ public class CommentServiceIntegrationTest {
         when(commentRepository.save(any(Comment.class))).thenReturn(comment);
 
         // Test method
-        Comment updatedCommentResponse = commentService.updateComment(comment, "username");
+        CommentResponse updatedCommentResponse = commentService.updateComment(1L, comment, "username");
 
         // Assertions
         assertTrue(updatedCommentResponse != null); // Add relevant assertions
+    }
+
+    @Test
+    public void testDeleteCommentById() {
+        // Mocking dependencies
+        Long id = 1L;
+        when(commentRepository.existsById(id)).thenReturn(true);
+
+        // Test method
+        assertDoesNotThrow(() -> commentService.deleteCommentById(id, "username"));
     }
 
     @Test
@@ -85,6 +93,3 @@ public class CommentServiceIntegrationTest {
         assertEquals(comments.size(), result.getContent().size());
     }
 }
-
-
-

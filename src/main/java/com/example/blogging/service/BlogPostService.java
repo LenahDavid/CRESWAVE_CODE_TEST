@@ -26,8 +26,4 @@ public interface BlogPostService {
     String extractUsernameFromToken(String token);
 
     List<BlogPostResponse> getAllBlogs();
-
-    List<BlogPost> searchByTitleOrContent(String keyword);
-
-    List<BlogPost> searchBlogPostsByTitleOrContent(String keyword);
 }

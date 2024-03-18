@@ -28,10 +28,10 @@ public class User implements UserDetails {
     @Column(name = "role")
     private Role role;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    List<BlogPost> blogPosts;
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    List<Comment> comments;
+//    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+//    List<BlogPost> blogPosts;
+//    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+//    List<Comment> comments;
 
 
     @Override

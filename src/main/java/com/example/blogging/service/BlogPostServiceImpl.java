@@ -36,7 +36,7 @@ public class BlogPostServiceImpl implements BlogPostService {
 
         User user = userRepository.findByUsername(username).get();
 
-        blogPost.setUser(user);
+        blogPost.setUser(username);
         blogPost.setComments(new ArrayList<>());
 
 
@@ -71,7 +71,7 @@ public class BlogPostServiceImpl implements BlogPostService {
             if(user.getRole().equals(Role.USER)) {
 
                 //check if the requesting user is the author of the blog post
-                if(existingBlogPost.getUser().getUsername().equals(username)) {
+                if(existingBlogPost.getUser().equals(username)) {
                     blogPostRepository.deleteById(id);
                 }else {
                     throw new IllegalArgumentException("You are not authorized to delete this blog post");
@@ -101,7 +101,7 @@ public class BlogPostServiceImpl implements BlogPostService {
         if (existingBlogPost != null) {
 
             //check if user is the author of the blog post
-            if (!existingBlogPost.getUser().getUsername().equals(username)) {
+            if (!existingBlogPost.getUser().equals(username)) {
                 throw new IllegalArgumentException("You are not authorized to update this blog post");
             }
 
@@ -111,7 +111,7 @@ public class BlogPostServiceImpl implements BlogPostService {
             // Update other fields as needed
 
             // Save the updated blog post
-             blogPostRepository.save(existingBlogPost);
+            blogPostRepository.save(existingBlogPost);
 
             return BlogPostMapper.mapToResponseDto(blogPostRepository.save(existingBlogPost));
         } else {
@@ -124,25 +124,16 @@ public class BlogPostServiceImpl implements BlogPostService {
         return blogPostRepository.findAll(pageable);
     }
 
-@Override
+    @Override
     public List<BlogPostResponse> getAllBlogs() {
-
         List<BlogPost> blogPosts = blogPostRepository.findAll();
         List<BlogPostResponse> blogPostResponses = new ArrayList<>();
         for(BlogPost blogPost : blogPosts) {
             blogPostResponses.add(BlogPostMapper.mapToResponseDto(blogPost));
         }
         return blogPostResponses;
-    }
 
-    @Override
-    public List<BlogPost> searchByTitleOrContent(String keyword) {
-        return null;
-    }
 
-    @Override
-    public List<BlogPost> searchBlogPostsByTitleOrContent(String keyword) {
-        return null;
     }
 
     @Override
@@ -170,22 +161,4 @@ public class BlogPostServiceImpl implements BlogPostService {
         }
         return userEmail;
     }
-    // In BlogPostMapper.java or BlogPostServiceImpl.java
-    public BlogPostResponse mapToResponseDto(BlogPost blogPost) {
-        BlogPostResponse response = new BlogPostResponse();
-        response.setId(blogPost.getId());
-        response.setTitle(blogPost.getTitle());
-        response.setContent(blogPost.getContent());
-
-        // Check if the user is not null before accessing its properties
-        if (blogPost.getUser() != null) {
-            response.setUsername(blogPost.getUser().getUsername());
-        }
-
-        return response;
-    }
-
 }
-
-
-

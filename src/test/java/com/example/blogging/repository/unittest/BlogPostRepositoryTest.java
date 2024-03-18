@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.List;
 
+import com.example.blogging.dto.BlogPostResponse;
 import com.example.blogging.entity.BlogPost;
 import com.example.blogging.repository.BlogPostRepository;
 import com.example.blogging.service.BlogPostService;
@@ -45,7 +46,7 @@ public class BlogPostRepositoryTest {
         when(blogPostRepository.searchByTitleOrContent(keyword)).thenReturn(mockResult);
 
         // Call the service method
-        List<BlogPost> result = blogPostServiceImpl.searchBlogPostsByTitleOrContent(keyword);
+        List<BlogPostResponse> result = blogPostServiceImpl.searchBlogPosts(keyword);
 
         // Verify the result
         assertThat(result).isNotNull();

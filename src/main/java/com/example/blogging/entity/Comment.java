@@ -13,9 +13,11 @@ public class Comment {
     private Long id;
     @Column(name = "content")
     private String content;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    User user;
+//    @ManyToOne
+//    @JoinColumn(name = "user_id")
+//    User user;
+    @Column(name = "username")
+    private String user;
     @ManyToOne
     @JoinColumn(name = "post_id")
     BlogPost blogPost;

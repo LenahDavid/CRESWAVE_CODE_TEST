@@ -57,7 +57,7 @@ public class CommentServiceImplIntegrationTest {
 
         Comment comment = new Comment();
         comment.setContent("Test comment content");
-        comment.setUser(user);
+        comment.setUser(user.getUsername());
         comment.setBlogPost(post);
 
         when(userRepository.findByUsername(any())).thenReturn(Optional.of(user));
@@ -83,7 +83,7 @@ public class CommentServiceImplIntegrationTest {
         when(commentRepository.findById(any())).thenReturn(Optional.of(comment));
 
         // When
-        Optional<Comment> result = commentService.getCommentById(1L);
+        Optional<CommentResponse> result = commentService.getCommentById(1L);
 
         // Then
         assertTrue(result.isPresent());

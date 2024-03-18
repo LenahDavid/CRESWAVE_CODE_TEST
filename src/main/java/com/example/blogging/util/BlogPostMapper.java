@@ -11,12 +11,14 @@ public class BlogPostMapper {
 
     public static BlogPostResponse mapToResponseDto(BlogPost blogPost) {
         BlogPostResponse responseDto = modelMapper.map(blogPost, BlogPostResponse.class);
-        responseDto.setAuthor(blogPost.getUser().getUsername()); // Assuming User has a getUsername() method
+        responseDto.setAuthor(blogPost.getUser()); // Assuming User has a getUsername() method
         return responseDto;
     }
+
+
     public static CommentResponse maptoCommentDto(Comment comment) {
         CommentResponse responseDto = modelMapper.map(comment, CommentResponse.class);
-        responseDto.setUser(comment.getUser().getUsername()); // Assuming User has a getUsername() method
+//        responseDto.setUser(comment.getUser().getUsername()); // Assuming User has a getUsername() method
         return responseDto;
     }
 

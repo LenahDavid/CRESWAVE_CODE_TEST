@@ -74,7 +74,7 @@ class BlogPostServiceTest {
         // Create a BlogPost object with a non-null user field
         BlogPost blogPost = new BlogPost();
         blogPost.setId(1L);
-        blogPost.setUser(user); // Set the user
+        blogPost.setUser(String.valueOf(user)); // Set the user
 
         // Mock behavior of the repository
         when(blogPostRepository.findById(1L)).thenReturn(Optional.of(blogPost));
@@ -96,7 +96,7 @@ class BlogPostServiceTest {
         // **Create and initialize a BlogPost object**
         BlogPost blogPost = new BlogPost();
         blogPost.setId(1L);
-        blogPost.setUser(user);
+        blogPost.setUser(String.valueOf(user));
 
         String username = "testUser";
 
@@ -123,7 +123,7 @@ class BlogPostServiceTest {
 
         User user = new User();
         user.setUsername("testUser"); // Set a valid username
-        blogPost.setUser(user); // Associate the user with the blog post
+        blogPost.setUser(String.valueOf(user)); // Associate the user with the blog post
 
         String username = "testUser";
 

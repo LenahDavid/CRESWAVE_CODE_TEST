@@ -72,7 +72,7 @@ class CommentServiceImplTest {
 
         when(commentRepository.findById(1L)).thenReturn(Optional.of(comment));
 
-        Optional<Comment> result = commentService.getCommentById(1L);
+        Optional<CommentResponse> result = commentService.getCommentById(1L);
 
         assertTrue(result.isPresent());
         assertEquals(comment, result.get());
@@ -85,7 +85,7 @@ class CommentServiceImplTest {
 
         Comment comment = new Comment();
         comment.setId(1L);
-        comment.setUser(user);
+        comment.setUser(String.valueOf(user));
 
         when(commentRepository.existsById(1L)).thenReturn(true);
         when(commentRepository.findById(1L)).thenReturn(Optional.of(comment));
@@ -104,7 +104,7 @@ class CommentServiceImplTest {
 
         Comment comment = new Comment();
         comment.setId(1L);
-        comment.setUser(user);
+        comment.setUser(String.valueOf(user));
 
         when(commentRepository.existsById(1L)).thenReturn(true);
         when(commentRepository.findById(1L)).thenReturn(Optional.of(comment));
@@ -127,7 +127,7 @@ class CommentServiceImplTest {
 
         Comment comment = new Comment();
         comment.setId(1L);
-        comment.setUser(commentOwner); // Set the comment's user
+        comment.setUser(String.valueOf(commentOwner)); // Set the comment's user
 
         when(commentRepository.existsById(1L)).thenReturn(true);
         when(commentRepository.findById(1L)).thenReturn(Optional.of(comment));
@@ -150,13 +150,13 @@ class CommentServiceImplTest {
         Comment existingComment = new Comment();
         existingComment.setId(1L);
         existingComment.setContent("Initial Comment");
-        existingComment.setUser(user);
+        existingComment.setUser(String.valueOf(user));
 
         when(commentRepository.findById(1L)).thenReturn(Optional.of(existingComment));
         when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
         when(commentRepository.save(existingComment)).thenReturn(updatedComment);
 
-        assertDoesNotThrow(() -> commentService.updateComment(updatedComment, "testUser"));
+        assertDoesNotThrow(() -> commentService.updateComment(updatedComment.getId(), updatedComment, "testUser"));
 
         assertEquals(updatedComment.getContent(), existingComment.getContent());
     }
