@@ -93,8 +93,8 @@ public class BlogPostController {
     )
 //    getting blog by id
     @GetMapping("/blog/{id}")
-    public Optional<BlogPostResponse> getBlogPost(@PathVariable Long id) {
-        return blogPostService.getBlogPostById(id);
+    public ResponseEntity<Optional<BlogPostResponse>> getBlogPost(@PathVariable Long id) {
+        return new ResponseEntity<>(blogPostService.getBlogPostById(id), HttpStatus.OK);
     }
     @Operation(
             description = "Updating of blog posts",

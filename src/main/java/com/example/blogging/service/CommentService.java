@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CommentService {
-    CommentResponse createComment(Comment comment, Long id, String username);
+    CommentResponse createComment(CommentResponse comment, Long id, String username);
     Optional<CommentResponse> getCommentById(Long id);
     void deleteCommentById(Long id, String username);
     CommentResponse updateComment(Long id, Comment updatedComment, String username);

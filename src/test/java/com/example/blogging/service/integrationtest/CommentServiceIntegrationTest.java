@@ -34,9 +34,10 @@ public class CommentServiceIntegrationTest {
     public void testCreateComment() {
         // Mocking dependencies
         Comment comment = new Comment();
+        CommentResponse commentResponse = new CommentResponse();
         when(commentRepository.save(any(Comment.class))).thenReturn(comment);
 
-        CommentResponse createdCommentResponse = commentService.createComment(comment, 1L, "username");
+        CommentResponse createdCommentResponse = commentService.createComment(commentResponse, 1L, "username");
 
         // Assertions
         assertTrue(createdCommentResponse != null);

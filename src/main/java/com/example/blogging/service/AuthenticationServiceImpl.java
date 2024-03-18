@@ -5,6 +5,7 @@ import com.example.blogging.dto.SignInRequest;
 import com.example.blogging.dto.SignUpRequest;
 import com.example.blogging.entity.Role;
 import com.example.blogging.entity.User;
+import com.example.blogging.exceptions.InvalidUsernameException;
 import com.example.blogging.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,7 +37,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public JWTAuthenticationResponse signin(SignInRequest signInRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signInRequest.getUsername(),signInRequest.getPassword()));
-        var user = userRepository.findByUsername(signInRequest.getUsername()).orElseThrow(() -> new IllegalArgumentException("Invalid username or password"));
+        var user = userRepository.findByUsername(signInRequest.getUsername()).orElseThrow(() -> new InvalidUsernameException("Invalid username or password"));
 
         var jwt =jwtService.generateToken(user);
         var refreshToken =jwtService.generateRefreshToken(new HashMap<>(),user);

@@ -1,5 +1,6 @@
 package com.example.blogging.config;
 
+import com.example.blogging.exceptions.JwtTokenMissingException;
 import com.example.blogging.service.JWTService;
 import com.example.blogging.service.UserService;
 import jakarta.servlet.FilterChain;

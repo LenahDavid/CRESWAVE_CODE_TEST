@@ -4,6 +4,8 @@ import com.example.blogging.dto.BlogPostResponse;
 import com.example.blogging.entity.BlogPost;
 import com.example.blogging.entity.Role;
 import com.example.blogging.entity.User;
+import com.example.blogging.exceptions.BlogPostNotFoundException;
+import com.example.blogging.exceptions.UserUnAuthorizedException;
 import com.example.blogging.repository.BlogPostRepository;
 import com.example.blogging.repository.UserRepository;
 import com.example.blogging.util.BlogPostMapper;
@@ -59,6 +61,9 @@ public class BlogPostServiceImpl implements BlogPostService {
     @Override
     public Optional<BlogPostResponse> getBlogPostById(Long id) {
         BlogPost blog = blogPostRepository.findById(id).orElse(null);
+        if(blog == null){
+            throw new BlogPostNotFoundException("BlogPost with id " + id + " not found");
+        }
         return Optional.of(BlogPostMapper.mapToResponseDto(blog));
     }
 
@@ -89,7 +94,7 @@ public class BlogPostServiceImpl implements BlogPostService {
 
 
         } else {
-            throw new EntityNotFoundException("Blog post with id " + id + " not found");
+            throw new BlogPostNotFoundException("Blog post with id " + id + " not found");
         }
     }
 
@@ -102,7 +107,7 @@ public class BlogPostServiceImpl implements BlogPostService {
 
             //check if user is the author of the blog post
             if (!existingBlogPost.getUser().equals(username)) {
-                throw new IllegalArgumentException("You are not authorized to update this blog post");
+                throw new UserUnAuthorizedException("You are not authorized to update this blog post");
             }
 
             // Update the existing blog post with the data from updatedBlogPost
@@ -115,7 +120,7 @@ public class BlogPostServiceImpl implements BlogPostService {
 
             return BlogPostMapper.mapToResponseDto(blogPostRepository.save(existingBlogPost));
         } else {
-            throw new EntityNotFoundException("Blog post with id " + id + " not found");
+            throw new BlogPostNotFoundException("Blog post with id " + id + " not found");
         }
     }
 

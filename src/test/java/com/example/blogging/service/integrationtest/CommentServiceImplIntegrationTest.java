@@ -60,12 +60,19 @@ public class CommentServiceImplIntegrationTest {
         comment.setUser(user.getUsername());
         comment.setBlogPost(post);
 
+
+
+        CommentResponse commentResponse = new CommentResponse();
+        commentResponse.setContent("Test comment content");
+        commentResponse.setUser(user.getUsername());
+        commentResponse.setBlogTitle(post.getTitle());
+
         when(userRepository.findByUsername(any())).thenReturn(Optional.of(user));
         when(blogPostRepository.getReferenceById(any())).thenReturn(post);
         when(commentRepository.save(any(Comment.class))).thenReturn(comment);
 
         // When
-        CommentResponse response = commentService.createComment(comment, 1L, "username");
+        CommentResponse response = commentService.createComment(commentResponse, 1L, "username");
 
         // Then
         assertNotNull(response);

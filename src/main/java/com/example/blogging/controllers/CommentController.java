@@ -32,7 +32,7 @@ public class CommentController {
 
     )
     @PostMapping("/comment/{id}")
-    public CommentResponse saveComment(@RequestBody Comment comment, @PathVariable("id") Long id, HttpServletRequest request) {
+    public CommentResponse saveComment(@RequestBody CommentResponse comment, @PathVariable("id") Long id, HttpServletRequest request) {
         String username = blogPostController.getUsernameFromHeader(request);
         return commentService.createComment(comment, id, username);
     }
@@ -59,8 +59,8 @@ public class CommentController {
 
     )
     @GetMapping("/comment/{id}")
-    public Optional<CommentResponse> getComment(@PathVariable Long id) {
-        return commentService.getCommentById(id);
+    public ResponseEntity<Optional<CommentResponse>>getComment(@PathVariable Long id) {
+        return new ResponseEntity<>(commentService.getCommentById(id), HttpStatus.OK);
     }
     @Operation(
             description = "Editing a comment",

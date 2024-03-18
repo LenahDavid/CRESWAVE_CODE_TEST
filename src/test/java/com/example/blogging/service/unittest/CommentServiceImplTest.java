@@ -50,6 +50,11 @@ class CommentServiceImplTest {
         comment.setId(1L);
         comment.setContent("Test Comment");
 
+        CommentResponse commentResponse = new CommentResponse();
+        commentResponse.setId(1L);
+        commentResponse.setContent("Test Comment");
+
+
         User user = new User();
         user.setUsername("testUser");
 
@@ -57,7 +62,7 @@ class CommentServiceImplTest {
         when(blogPostRepository.getReferenceById(1L)).thenReturn(new BlogPost());
         when(commentRepository.save(comment)).thenReturn(comment);
 
-        CommentResponse response = commentService.createComment(comment, 1L, "testUser");
+        CommentResponse response = commentService.createComment(commentResponse, 1L, "testUser");
 
         assertNotNull(response);
         assertEquals(comment.getId(), response.getId());

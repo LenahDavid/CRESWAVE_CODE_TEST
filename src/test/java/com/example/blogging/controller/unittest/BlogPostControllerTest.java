@@ -97,7 +97,7 @@ class BlogPostControllerTest {
 
         when(blogPostService.getBlogPostById(id)).thenReturn(expectedResponse);
 
-        Optional<BlogPostResponse> response = blogPostController.getBlogPost(id);
+        Optional<BlogPostResponse> response = blogPostController.getBlogPost(id).getBody();
 
         assertEquals(expectedResponse, response);
         verify(blogPostService, times(1)).getBlogPostById(id);

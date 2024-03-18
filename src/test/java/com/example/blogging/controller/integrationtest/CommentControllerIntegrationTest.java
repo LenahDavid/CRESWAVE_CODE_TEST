@@ -42,7 +42,7 @@ public class CommentControllerIntegrationTest {
         Comment comment = new Comment();
         CommentResponse response = new CommentResponse();
         when(blogPostController.getUsernameFromHeader(any())).thenReturn("username"); // Mock getUsernameFromHeader
-        when(commentService.createComment(any(Comment.class), any(Long.class), any(String.class))).thenReturn(response);
+        when(commentService.createComment(any(CommentResponse.class), any(Long.class), any(String.class))).thenReturn(response);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/comment/1")
                         .contentType(MediaType.APPLICATION_JSON)

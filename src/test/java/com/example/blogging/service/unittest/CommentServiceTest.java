@@ -47,6 +47,12 @@ class CommentServiceTest {
         // **Set necessary fields for Comment object**
         comment.setUser(String.valueOf(new User())); // Assuming Comment has a User field
 
+
+        CommentResponse commentResponse = new CommentResponse();
+        commentResponse.setUser("testUser");
+        commentResponse.setId(1L);
+
+
         // Mock behavior of commentRepository
         when(commentRepository.save(comment)).thenReturn(comment);
 
@@ -54,7 +60,7 @@ class CommentServiceTest {
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(new User()));
 
         // Test the method
-        CommentResponse response = commentService.createComment(comment, postId, username);
+        CommentResponse response = commentService.createComment(commentResponse, postId, username);
 
         // Assert the result
         assertEquals(comment.getId(), response.getId()); // Assuming CommentResponse includes id field

@@ -43,14 +43,15 @@ public class CommentControllerTest {
         // Arrange
         Long blogPostId = 1L;
         Comment comment = new Comment();
+        CommentResponse commentResponse = new CommentResponse();
         String expectedUsername = "test_user";
 
         when(request.getHeader("Authorization")).thenReturn("valid-token");
         when(blogPostController.getUsernameFromHeader(request)).thenReturn(expectedUsername);
-        when(commentService.createComment(comment, blogPostId, expectedUsername)).thenReturn(new CommentResponse());
+        when(commentService.createComment(commentResponse, blogPostId, expectedUsername)).thenReturn(new CommentResponse());
 
         // Act
-        CommentResponse response = commentController.saveComment(comment, blogPostId, request);
+        CommentResponse response = commentController.saveComment(commentResponse, blogPostId, request);
 
         // Assert
         assertNotNull(response);
@@ -85,7 +86,7 @@ public class CommentControllerTest {
         when(commentService.getCommentById(id)).thenReturn(expectedComment);
 
         // Act
-        Optional<CommentResponse> response = commentController.getComment(id);
+        Optional<CommentResponse> response = commentController.getComment(id).getBody();
 
         // Assert
         assertTrue(response.isPresent());
@@ -101,7 +102,7 @@ public class CommentControllerTest {
         when(commentService.getCommentById(id)).thenReturn(Optional.empty());
 
         // Act
-        Optional<CommentResponse> response = commentController.getComment(id);
+        Optional<CommentResponse> response = commentController.getComment(id).getBody();
 
         // Assert
         assertFalse(response.isPresent());
