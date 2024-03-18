@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BlogPostServiceImpl implements BlogPostService {
@@ -79,7 +80,7 @@ public class BlogPostServiceImpl implements BlogPostService {
                 if(existingBlogPost.getUser().equals(username)) {
                     blogPostRepository.deleteById(id);
                 }else {
-                    throw new IllegalArgumentException("You are not authorized to delete this blog post");
+                    throw new UserUnAuthorizedException("You are not authorized to delete this blog post");
                 }
 
 
@@ -89,7 +90,7 @@ public class BlogPostServiceImpl implements BlogPostService {
             }
 
             else {
-                throw new IllegalArgumentException("You are not authorized to delete this blog post");
+                throw new UserUnAuthorizedException("You are not authorized to delete this blog post");
             }
 
 
@@ -101,10 +102,15 @@ public class BlogPostServiceImpl implements BlogPostService {
     @Override
     public BlogPostResponse updateBlogPost(BlogPost updatedBlogPost, String username) {
         Long id = updatedBlogPost.getId(); // Assuming id is a field in BlogPost
+
+        // Check if the id is null
+        if (id == null) {
+            throw new BlogPostNotFoundException("Blog post id cannot be null");
+        }
+
         BlogPost existingBlogPost = blogPostRepository.findById(id).orElse(null);
 
         if (existingBlogPost != null) {
-
             //check if user is the author of the blog post
             if (!existingBlogPost.getUser().equals(username)) {
                 throw new UserUnAuthorizedException("You are not authorized to update this blog post");
@@ -116,13 +122,14 @@ public class BlogPostServiceImpl implements BlogPostService {
             // Update other fields as needed
 
             // Save the updated blog post
-            blogPostRepository.save(existingBlogPost);
+            existingBlogPost = blogPostRepository.save(existingBlogPost);
 
-            return BlogPostMapper.mapToResponseDto(blogPostRepository.save(existingBlogPost));
+            return BlogPostMapper.mapToResponseDto(existingBlogPost);
         } else {
             throw new BlogPostNotFoundException("Blog post with id " + id + " not found");
         }
     }
+
 
     @Override
     public Page<BlogPost> getAllBlogPosts(PageRequest pageable) {
@@ -143,15 +150,28 @@ public class BlogPostServiceImpl implements BlogPostService {
 
     @Override
     public List<BlogPostResponse> searchBlogPosts(String keyword) {
+        // Check if the keyword is empty or null
+        if (keyword == null || keyword.trim().isEmpty()) {
+            throw new IllegalArgumentException("Keyword cannot be empty or null");
+        }
 
+        // Search for blog posts by keyword in title or content
         List<BlogPost> blogPosts = blogPostRepository.searchByTitleOrContent(keyword);
+
+        // Check if no blog posts are found for the given keyword
+        if (blogPosts.isEmpty()) {
+            throw new BlogPostNotFoundException("No blog posts found for keyword: " + keyword);
+        }
+
+        // Convert found blog posts to response DTOs
         List<BlogPostResponse> blogPostResponses = new ArrayList<>();
-        for(BlogPost blogPost : blogPosts) {
+        for (BlogPost blogPost : blogPosts) {
             blogPostResponses.add(BlogPostMapper.mapToResponseDto(blogPost));
         }
-        return blogPostResponses;
 
+        return blogPostResponses;
     }
+
 
     @Override
     public String extractUsernameFromToken(String authHeader) {
@@ -166,4 +186,6 @@ public class BlogPostServiceImpl implements BlogPostService {
         }
         return userEmail;
     }
+
+
 }

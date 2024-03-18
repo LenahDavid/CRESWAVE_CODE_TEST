@@ -83,7 +83,7 @@ public class CommentServiceImpl implements CommentService {
         } else if (user.getRole().equals(Role.USER)) {
             //check if user is the author of the comment
             if (!commentResponse.getUser().equals(username)) {
-                throw new UserUnAuthorizedException("You are not authorized to update this comment");
+                throw new UserUnAuthorizedException("You are not authorized to delete this comment");
             }
             commentRepository.deleteById(id);
         }

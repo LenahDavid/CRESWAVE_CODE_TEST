@@ -103,7 +103,7 @@ public class BlogPostController {
     )
 //    Editing of blog
     @PutMapping("/blog/{id}")
-    public BlogPostResponse updateBlogPost(@PathVariable Long id, @RequestBody BlogPost updatedBlogPost, HttpServletRequest request) {
+    public BlogPostResponse updateBlogPost(@PathVariable("id") Long id, @RequestBody BlogPost updatedBlogPost, HttpServletRequest request) {
         String username = getUsernameFromHeader(request);
         return blogPostService.updateBlogPost(updatedBlogPost, username);
     }
