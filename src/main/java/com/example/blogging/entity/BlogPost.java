@@ -3,6 +3,7 @@ package com.example.blogging.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -17,6 +18,10 @@ public class BlogPost {
     private String title;
     @Column(name = "post_content")
     private String content;
+
+    @Column(name = "created_at")
+    private Date createdAt;
+    //    @ManyToOne
 //    @ManyToOne(cascade = CascadeType.ALL)
 //    @JoinColumn(name = "author_id")
 //    User user;

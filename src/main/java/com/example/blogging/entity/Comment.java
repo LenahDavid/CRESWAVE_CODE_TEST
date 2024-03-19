@@ -15,9 +15,9 @@ public class Comment {
     private Long id;
     @Column(name = "content")
     private String content;
-
-    @Column(name = "created_at")
-    private Date createdAt;
+//
+//    @Column(name = "created_at")
+//    private Date createdAt;
 //    @ManyToOne
 //    @JoinColumn(name = "user_id")
 //    User user;

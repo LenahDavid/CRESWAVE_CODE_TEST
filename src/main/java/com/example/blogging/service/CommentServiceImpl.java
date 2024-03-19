@@ -12,17 +12,20 @@ import com.example.blogging.repository.CommentRepository;
 import com.example.blogging.repository.UserRepository;
 import com.example.blogging.util.BlogPostMapper;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import com.example.blogging.dto.CommentMapper;
-
+@Slf4j
 @Service
 public class CommentServiceImpl implements CommentService {
 
@@ -109,8 +112,22 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Page<CommentResponse> getAllComments(Pageable pageable) {
         Page<Comment> commentPage = commentRepository.findAll(pageable);
-        return commentPage.map(CommentMapper::mapToResponseDto);
+        List<CommentResponse> commentResponses = new ArrayList<>();
+        for (Comment comment : commentPage.getContent()) {
+            // Manually map comment to commentResponse
+            CommentResponse commentResponse = new CommentResponse();
+            commentResponse.setId(comment.getId());
+            commentResponse.setContent(comment.getContent());
+            // Map other properties as needed
+            commentResponses.add(commentResponse);
+        }
+        return new PageImpl<>(commentResponses, pageable, commentPage.getTotalElements());
     }
+
+
+
+
+
 
 
     @Override

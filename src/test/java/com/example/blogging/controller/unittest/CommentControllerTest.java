@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -64,17 +65,16 @@ public class CommentControllerTest {
         int size = 20;
         String sortBy = "createdAt";
         String sortOrder = "desc";
-
         Page<Comment> mockPage = mock(Page.class);
-        PageRequest expectedPageable = PageRequest.of(page, size);
-
-        when(commentService.getAllComments(expectedPageable)).thenReturn(mockPage);
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
+        when(commentService.getAllComments(pageRequest)).thenReturn((Page) mockPage);
 
         // Act
         ResponseEntity<Page<CommentResponse>> response = commentController.getAllComments(page, size, sortBy, sortOrder);
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
     }
 
     @Test

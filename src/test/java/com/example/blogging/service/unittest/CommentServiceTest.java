@@ -127,7 +127,7 @@ class CommentServiceTest {
 
     @Test
     void testGetAllComments() {
-        int page = 0;
+        int page = 1;
         int size = 10;
         PageRequest pageable = PageRequest.of(page, size);
         List<Comment> comments = new ArrayList<>(); // Assuming you have some test data
