@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.data.domain.PageRequest.*;
 
 class BlogPostServiceTest {
 
@@ -141,20 +142,23 @@ class BlogPostServiceTest {
 
     @Test
     void testGetAllBlogPosts() {
+        // Mock blog post data
         List<BlogPost> blogPosts = new ArrayList<>();
         blogPosts.add(new BlogPost());
         blogPosts.add(new BlogPost());
         Page<BlogPost> blogPostPage = new PageImpl<>(blogPosts);
 
-        // Mock behavior
+        // Mock behavior of blogPostRepository.findAll()
         when(blogPostRepository.findAll(any(PageRequest.class))).thenReturn(blogPostPage);
 
-        // Test the method
-        Page<BlogPost> result = blogPostService.getAllBlogPosts(PageRequest.of(0, 10));
+        // Invoke the method to be tested
+        Page<BlogPostResponse> result = blogPostService.getAllBlogPosts(PageRequest.of(0, 10));
 
+        // Assertions
         assertNotNull(result);
-        assertEquals(blogPostPage, result);
+        assertEquals(blogPostPage.getTotalElements(), result.getTotalElements());
+        // You may need to adjust assertions based on your specific requirements
     }
-
 }
+
 

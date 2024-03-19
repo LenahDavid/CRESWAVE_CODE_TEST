@@ -37,7 +37,7 @@ public class CommentController {
         return commentService.createComment(comment, id, username);
     }
     @Operation(
-            description = "Getting all comments",
+            description = "Getting all comments with pagination",
             summary = "Getting of comments with pagination"
 
     )

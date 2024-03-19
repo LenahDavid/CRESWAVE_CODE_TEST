@@ -66,15 +66,16 @@ public class BlogPostController {
     )
 //    Pagination of blogs
     @GetMapping("/blog")
-    public ResponseEntity<List<BlogPost>> getAllBlogPosts(
+    public ResponseEntity<Page<BlogPostResponse>> getAllBlogPosts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "createdAt") String sortBy,
-            @RequestParam(defaultValue = "desc") String sortOrder
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortOrder
     ) {
         PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
-        Page<BlogPost> blogPostPage = blogPostService.getAllBlogPosts(pageable);
-        return ResponseEntity.ok(blogPostPage.getContent());
+        Page<BlogPostResponse> blogPostPage = blogPostService.getAllBlogPosts(pageable);
+        return ResponseEntity.ok(blogPostPage);
+
     }
     @Operation(
             description = "Getting all blog posts",

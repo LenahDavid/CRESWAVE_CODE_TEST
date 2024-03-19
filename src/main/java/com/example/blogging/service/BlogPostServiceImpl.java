@@ -1,5 +1,7 @@
+
 package com.example.blogging.service;
 
+import com.example.blogging.dto.BlogPostMappers;
 import com.example.blogging.dto.BlogPostResponse;
 import com.example.blogging.entity.BlogPost;
 import com.example.blogging.entity.Role;
@@ -9,7 +11,6 @@ import com.example.blogging.exceptions.UserUnAuthorizedException;
 import com.example.blogging.repository.BlogPostRepository;
 import com.example.blogging.repository.UserRepository;
 import com.example.blogging.util.BlogPostMapper;
-import jakarta.persistence.EntityNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class BlogPostServiceImpl implements BlogPostService {
@@ -133,16 +133,19 @@ public class BlogPostServiceImpl implements BlogPostService {
 
 
     @Override
-    public Page<BlogPost> getAllBlogPosts(PageRequest pageable) {
-        return blogPostRepository.findAll(pageable);
+    public Page<BlogPostResponse> getAllBlogPosts(PageRequest pageable) {
+        Page<BlogPost> blogPostPage = blogPostRepository.findAll(pageable);
+        return blogPostPage.map(BlogPostMappers::mapToResponseDto);
     }
+
+
 
     @Override
     public List<BlogPostResponse> getAllBlogs() {
         List<BlogPost> blogPosts = blogPostRepository.findAll();
         List<BlogPostResponse> blogPostResponses = new ArrayList<>();
         for(BlogPost blogPost : blogPosts) {
-            blogPostResponses.add(BlogPostMapper.mapToResponseDto(blogPost));
+            blogPostResponses.add(BlogPostMappers.mapToResponseDto(blogPost));
         }
         return blogPostResponses;
 

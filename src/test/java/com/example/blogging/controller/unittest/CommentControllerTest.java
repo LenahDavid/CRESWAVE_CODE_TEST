@@ -61,10 +61,10 @@ public class CommentControllerTest {
     @Test
     public void testGetAllComments_Paginated() {
         // Arrange
-        int page = 1;
+        int page = 0;
         int size = 20;
-        String sortBy = "createdAt";
-        String sortOrder = "desc";
+        String sortBy = "id";
+        String sortOrder = "asc";
         Page<Comment> mockPage = mock(Page.class);
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
         when(commentService.getAllComments(pageRequest)).thenReturn((Page) mockPage);

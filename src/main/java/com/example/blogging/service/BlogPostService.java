@@ -1,3 +1,4 @@
+
 package com.example.blogging.service;
 
 
@@ -19,7 +20,7 @@ public interface BlogPostService {
     public BlogPostResponse updateBlogPost(BlogPost blogPost, String username);
 
 
-    Page<BlogPost> getAllBlogPosts(PageRequest pageable);
+    Page<BlogPostResponse> getAllBlogPosts(PageRequest pageable);
 
     List<BlogPostResponse> searchBlogPosts(String keyword);
 
