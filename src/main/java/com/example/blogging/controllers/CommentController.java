@@ -43,16 +43,17 @@ public class CommentController {
     )
 
     @GetMapping("/comment")
-    public ResponseEntity<List<Comment>> getAllComments(
-            @RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<Page<CommentResponse>> getAllComments(
+            @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "createdAt") String sortBy,
             @RequestParam(defaultValue = "desc") String sortOrder
     ) {
         PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
-        Page<Comment> commentPage = commentService.getAllComments(pageable);
-        return ResponseEntity.ok(commentPage.getContent());
+        Page<CommentResponse> commentPage = commentService.getAllComments(pageable);
+        return ResponseEntity.ok(commentPage);
     }
+
     @Operation(
             description = "Getting a comment",
             summary = "Getting a comment by id"

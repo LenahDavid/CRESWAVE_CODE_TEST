@@ -88,7 +88,7 @@ public class CommentServiceIntegrationTest {
         when(commentRepository.findAll(any(PageRequest.class))).thenReturn(new PageImpl<>(comments));
 
         // Test method
-        Page<Comment> result = commentService.getAllComments(PageRequest.of(0, 10));
+        Page<CommentResponse> result = commentService.getAllComments(PageRequest.of(0, 10));
 
         // Assertions
         assertEquals(comments.size(), result.getContent().size());

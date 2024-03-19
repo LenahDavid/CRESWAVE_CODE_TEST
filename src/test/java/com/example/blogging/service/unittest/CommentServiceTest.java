@@ -135,7 +135,7 @@ class CommentServiceTest {
 
         when(commentRepository.findAll(pageable)).thenReturn(expectedPage);
 
-        Page<Comment> result = commentService.getAllComments(pageable);
+        Page<CommentResponse> result = commentService.getAllComments(pageable);
 
         assertEquals(expectedPage, result);
         verify(commentRepository, times(1)).findAll(pageable);

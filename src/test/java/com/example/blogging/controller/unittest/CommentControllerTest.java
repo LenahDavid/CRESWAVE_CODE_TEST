@@ -71,7 +71,7 @@ public class CommentControllerTest {
         when(commentService.getAllComments(expectedPageable)).thenReturn(mockPage);
 
         // Act
-        ResponseEntity<List<Comment>> response = commentController.getAllComments(page, size, sortBy, sortOrder);
+        ResponseEntity<Page<CommentResponse>> response = commentController.getAllComments(page, size, sortBy, sortOrder);
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());

@@ -15,11 +15,13 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import com.example.blogging.dto.CommentMapper;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -105,9 +107,11 @@ public class CommentServiceImpl implements CommentService {
         return BlogPostMapper.maptoCommentDto(commentRepository.save(existingComment));
     }
     @Override
-    public Page<Comment> getAllComments(PageRequest pageable) {
-        return commentRepository.findAll(pageable);
+    public Page<CommentResponse> getAllComments(Pageable pageable) {
+        Page<Comment> commentPage = commentRepository.findAll(pageable);
+        return commentPage.map(CommentMapper::mapToResponseDto);
     }
+
 
     @Override
     public List<CommentResponse> getComments() {

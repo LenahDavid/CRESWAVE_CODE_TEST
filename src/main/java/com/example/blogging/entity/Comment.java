@@ -3,6 +3,8 @@ package com.example.blogging.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Date;
+
 @Entity
 @Data
 @Table(name = "comments")
@@ -13,6 +15,9 @@ public class Comment {
     private Long id;
     @Column(name = "content")
     private String content;
+
+    @Column(name = "created_at")
+    private Date createdAt;
 //    @ManyToOne
 //    @JoinColumn(name = "user_id")
 //    User user;

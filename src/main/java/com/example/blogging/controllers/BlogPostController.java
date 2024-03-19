@@ -21,10 +21,10 @@ import java.util.Optional;
 
 @RestController
 @ApiResponses({@ApiResponse(responseCode = "200", description = "Success"),
-    @ApiResponse(responseCode = "400", description = "Bad Request"),
-    @ApiResponse(responseCode = "403", description = "Unauthorized"),
-    @ApiResponse(responseCode = "404", description = "Not Found"),
-    @ApiResponse(responseCode = "500", description = "Internal Server Error"),
+        @ApiResponse(responseCode = "400", description = "Bad Request"),
+        @ApiResponse(responseCode = "403", description = "Unauthorized"),
+        @ApiResponse(responseCode = "404", description = "Not Found"),
+        @ApiResponse(responseCode = "500", description = "Internal Server Error"),
         @ApiResponse(responseCode = "201", description = "Created")
 })
 public class BlogPostController {

@@ -32,6 +32,7 @@ public class BlogPostServiceImpl implements BlogPostService {
     @Autowired
     UserRepository userRepository;
 
+
     @Override
     public BlogPostResponse createBlogPost(BlogPost blogPost, String username) {
 

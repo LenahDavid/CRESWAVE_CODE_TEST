@@ -175,7 +175,7 @@ class CommentServiceImplTest {
 
         when(commentRepository.findAll(any(PageRequest.class))).thenReturn(commentPage);
 
-        Page<Comment> result = commentService.getAllComments(PageRequest.of(0, 10));
+        Page<CommentResponse> result = commentService.getAllComments(PageRequest.of(0, 10));
 
         assertNotNull(result);
         assertEquals(commentPage, result);
