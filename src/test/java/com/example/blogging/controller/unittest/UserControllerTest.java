@@ -65,7 +65,7 @@ public class UserControllerTest {
 
         when(userService.updateUser(any(User.class))).thenReturn(updateUser);
 
-        User updatedUser = userController.updateUser(1L, updateUser);
+        User updatedUser = userController.updateUser(1L, updateUser).getBody();
 
         assertThat(updatedUser).isNotNull();
         assertThat(updatedUser.getId()).isEqualTo(1L);

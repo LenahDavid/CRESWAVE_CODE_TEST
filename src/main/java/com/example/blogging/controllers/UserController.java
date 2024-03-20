@@ -5,6 +5,7 @@ import com.example.blogging.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,9 +50,19 @@ public class UserController {
     )
 //    Updating of user by id
     @PutMapping("/api/v1/user/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User updateUser) {
-        return  userService.updateUser(updateUser);
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updateUser) {
+        // Ensure the id is set in the updateUser object
+        updateUser.setId(id);
+
+        // Call updateUser method and handle the response
+        try {
+            User updatedUser = userService.updateUser(updateUser);
+            return ResponseEntity.ok(updatedUser);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
+
     @Operation(
             description = "Deleting a User",
             summary = "Deleting of user by Id"

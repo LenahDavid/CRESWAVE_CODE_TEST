@@ -40,16 +40,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(User updatedUser) {
         Long id = updatedUser.getId();
+        if (id == null) {
+            throw new IllegalArgumentException("User ID cannot be null");
+        }
         User existingUser = userRepository.findById(id).orElse(null);
         if (existingUser != null) {
             existingUser.setUsername(updatedUser.getUsername());
+            // Update other fields as needed
 
             return userRepository.save(existingUser);
         } else {
-            throw new EntityNotFoundException("Author with id " + id + " not found");
+            throw new EntityNotFoundException("User with id " + id + " not found");
         }
     }
-
     public UserDetailsService userDetailsService(){
         return  new UserDetailsService() {
             @Override
