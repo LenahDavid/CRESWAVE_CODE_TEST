@@ -74,7 +74,7 @@ public class UserControllerTest {
 
     @Test
     public void testDeleteUser() {
-        ResponseEntity<Void> responseEntity = userController.deleteUser(1L);
+        ResponseEntity<Void> responseEntity = (ResponseEntity<Void>) userController.deleteUserById(1L);
 
         verify(userService).deleteUserById(1L);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);

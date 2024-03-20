@@ -34,9 +34,11 @@ public class UserServiceImpl implements UserService {
         if (existingUser != null) {
             userRepository.deleteById(id);
         } else {
-            throw new EntityNotFoundException("Blog post with id " + id + " not found");
+            throw new UserNotFoundException("User with id " + id + " not found");
         }
     }
+
+
 
     @Override
     public User updateUser(User updatedUser) {

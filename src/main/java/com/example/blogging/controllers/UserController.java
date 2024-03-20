@@ -1,6 +1,7 @@
 package com.example.blogging.controllers;
 
 import com.example.blogging.entity.User;
+import com.example.blogging.exceptions.UserNotFoundException;
 import com.example.blogging.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -70,8 +71,16 @@ public class UserController {
     )
 //    Deleting of user by id
     @DeleteMapping("/api/v1/user/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUserById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> deleteUserById(@PathVariable Long id) {
+        try {
+            userService.deleteUserById(id);
+            return ResponseEntity.ok().build();
+        } catch (UserNotFoundException e) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage()); // Return the message from the exception
+        }
     }
+
+
 }
