@@ -1,5 +1,7 @@
 package com.example.blogging.entity;
 
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,6 +37,7 @@ public class User implements UserDetails {
 
 
     @Override
+// @JsonDeserialize(using = GrantedAuthorityDeserializer.class)
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }

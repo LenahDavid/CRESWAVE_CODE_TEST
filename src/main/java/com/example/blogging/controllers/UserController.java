@@ -22,16 +22,16 @@ import java.util.Optional;
 public class UserController {
     @Autowired
     UserService userService;
-    @Operation(
-            description = "Creating a User",
-            summary = "Creating of users"
-
-    )
-//    Creating of users
-    @PostMapping("/api/v1/user")
-    public User saveUser(@RequestBody User user) {
-        return userService.createUser(user);
-    }
+//    @Operation(
+//            description = "Creating a User",
+//            summary = "Creating of users"
+//
+//    )
+////    Creating of users
+//    @PostMapping("/api/v1/user")
+//    public User saveUser(@RequestBody User user) {
+//        return userService.createUser(user);
+//    }
     @Operation(
             description = "Getting a User",
             summary = "Getting of user  by Id"
