@@ -1,6 +1,7 @@
 package com.example.blogging.service;
 
 import com.example.blogging.entity.User;
+import com.example.blogging.exceptions.UserNotFoundException;
 import com.example.blogging.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class UserServiceImpl implements UserService {
 
             return userRepository.save(existingUser);
         } else {
-            throw new EntityNotFoundException("User with id " + id + " not found");
+            throw new UserNotFoundException("User with id " + id + " not found");
         }
     }
     public UserDetailsService userDetailsService(){
